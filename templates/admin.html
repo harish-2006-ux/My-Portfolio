@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'DM Sans', sans-serif; background: #0d0d14; color: #f0f0f8; }
+    :root {
+      --c1: #ff6b6b; --c2: #ffd93d; --c3: #6bcb77;
+      --c4: #4d96ff; --c5: #c77dff;
+      --card: #1a1a2e; --muted: #9999bb;
+      --border: rgba(255,255,255,0.08);
+    }
+
+    /* TOP BAR */
+    .topbar {
+      background: #14141f; border-bottom: 1px solid var(--border);
+      padding: 0 2rem; height: 60px;
+      display: flex; align-items: center; justify-content: space-between;
+      position: sticky; top: 0; z-index: 50;
+    }
+    .topbar-title {
+      font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.1rem;
+      background: linear-gradient(135deg, var(--c1), var(--c5));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .topbar-actions { display: flex; gap: 0.8rem; align-items: center; }
+    .btn-sm {
+      padding: 0.4rem 1rem; border-radius: 20px; font-size: 0.8rem;
+      font-weight: 600; cursor: pointer; text-decoration: none;
+      font-family: 'DM Sans', sans-serif; border: none;
+    }
+    .btn-view { background: rgba(77,150,255,0.15); color: var(--c4); border: 1px solid rgba(77,150,255,0.3); }
+    .btn-logout { background: rgba(255,107,107,0.15); color: var(--c1); border: 1px solid rgba(255,107,107,0.3); }
+
+    /* LAYOUT */
+    .admin-wrap { max-width: 1000px; margin: 0 auto; padding: 2rem; }
+
+    /* SECTION BLOCKS */
+    .admin-section {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 20px; margin-bottom: 2rem; overflow: hidden;
+    }
+    .admin-section-header {
+      padding: 1.2rem 1.5rem;
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; gap: 0.8rem;
+    }
+    .admin-section-header h2 {
+      font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 700;
+    }
+    .section-dot {
+      width: 10px; height: 10px; border-radius: 50%;
+    }
+    .admin-section-body { padding: 1.5rem; }
+
+    /* FORMS */
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem; }
+    .form-row.single { grid-template-columns: 1fr; }
+    .form-row.triple { grid-template-columns: 1fr 1fr 1fr; }
+    label { font-size: 0.75rem; color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; display: block; margin-bottom: 0.4rem; }
+    input[type="text"], input[type="email"], input[type="url"], input[type="number"], textarea, select {
+      width: 100%; padding: 0.7rem 1rem;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 10px; color: #f0f0f8;
+      font-size: 0.9rem; font-family: 'DM Sans', sans-serif;
+      outline: none; transition: border-color 0.2s;
+    }
+    input:focus, textarea:focus { border-color: var(--c5); }
+    textarea { resize: vertical; min-height: 80px; }
+    .btn-add {
+      background: linear-gradient(135deg, var(--c4), var(--c5));
+      color: white; border: none; padding: 0.6rem 1.4rem;
+      border-radius: 10px; font-size: 0.85rem; font-weight: 600;
+      cursor: pointer; font-family: 'DM Sans', sans-serif;
+      margin-top: 0.5rem;
+    }
+    .btn-add:hover { opacity: 0.88; }
+
+    /* EXISTING ITEMS */
+    .items-list { margin-top: 1.5rem; display: flex; flex-direction: column; gap: 0.8rem; }
+    .item-row {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 12px; padding: 1rem 1.2rem;
+    }
+    .item-row summary {
+      cursor: pointer; display: flex; justify-content: space-between; align-items: center;
+      list-style: none; user-select: none;
+    }
+    .item-row summary::-webkit-details-marker { display: none; }
+    .item-name { font-size: 0.9rem; font-weight: 500; }
+    .item-actions { display: flex; gap: 0.5rem; align-items: center; }
+    .tag-tools { display: flex; flex-wrap: wrap; gap: 0.3rem; margin-left: 0.5rem; }
+    .tag { font-size: 0.7rem; padding: 0.15rem 0.5rem; border-radius: 8px; background: rgba(255,255,255,0.08); color: var(--muted); }
+    .btn-edit {
+      font-size: 0.75rem; padding: 0.3rem 0.7rem; border-radius: 8px;
+      background: rgba(77,150,255,0.12); color: var(--c4);
+      border: 1px solid rgba(77,150,255,0.25); cursor: pointer;
+      font-family: 'DM Sans', sans-serif; font-weight: 600;
+    }
+    .btn-delete {
+      font-size: 0.75rem; padding: 0.3rem 0.7rem; border-radius: 8px;
+      background: rgba(255,107,107,0.12); color: var(--c1);
+      border: 1px solid rgba(255,107,107,0.25); cursor: pointer;
+      font-family: 'DM Sans', sans-serif; font-weight: 600; text-decoration: none;
+    }
+    .edit-form { margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border); }
+    .skill-level-wrap { display: flex; align-items: center; gap: 0.8rem; }
+    .skill-level-wrap input[type="range"] { flex: 1; accent-color: var(--c5); }
+    .level-display { font-size: 0.85rem; color: var(--c5); font-weight: 600; min-width: 36px; }
+
+    /* DIVIDER */
+    .add-divider {
+      font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.1em;
+      color: var(--muted); margin-bottom: 1rem; font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+
+<div class="topbar">
+  <span class="topbar-title">Portfolio Admin</span>
+  <div class="topbar-actions">
+    <a href="/" class="btn-sm btn-view" target="_blank">View Site</a>
+    <a href="/admin/logout" class="btn-sm btn-logout">Logout</a>
+  </div>
+</div>
+
+<div class="admin-wrap">
+
+  <!-- ── ABOUT ── -->
+  <div class="admin-section" id="about">
+    <div class="admin-section-header">
+      <span class="section-dot" style="background: #4d96ff;"></span>
+      <h2>About Me</h2>
+    </div>
+    <div class="admin-section-body">
+      <form method="POST" action="/admin/about/update">
+        <div class="form-row">
+          <div>
+            <label>Full Name</label>
+            <input type="text" name="name" value="{{ data.about.name }}"/>
+          </div>
+          <div>
+            <label>Job Title</label>
+            <input type="text" name="title" value="{{ data.about.title }}"/>
+          </div>
+        </div>
+        <div class="form-row single">
+          <div>
+            <label>Tagline</label>
+            <input type="text" name="tagline" value="{{ data.about.tagline }}"/>
+          </div>
+        </div>
+        <div class="form-row single">
+          <div>
+            <label>Bio</label>
+            <textarea name="bio">{{ data.about.bio }}</textarea>
+          </div>
+        </div>
+        <div class="form-row triple">
+          <div>
+            <label>Email</label>
+            <input type="email" name="email" value="{{ data.about.email }}"/>
+          </div>
+          <div>
+            <label>LinkedIn URL</label>
+            <input type="url" name="linkedin" value="{{ data.about.linkedin }}"/>
+          </div>
+          <div>
+            <label>GitHub URL</label>
+            <input type="url" name="github" value="{{ data.about.github }}"/>
+          </div>
+        </div>
+        <button type="submit" class="btn-add">Save About</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ── PROJECTS ── -->
+  <div class="admin-section" id="projects">
+    <div class="admin-section-header">
+      <span class="section-dot" style="background: #ff6b6b;"></span>
+      <h2>Projects</h2>
+    </div>
+    <div class="admin-section-body">
+
+      <div class="add-divider">Add New Project</div>
+      <form method="POST" action="/admin/project/add">
+        <div class="form-row">
+          <div><label>Title</label><input type="text" name="title" placeholder="Project title"/></div>
+          <div><label>Tools (comma separated)</label><input type="text" name="tools" placeholder="Python, SQL, Tableau"/></div>
+        </div>
+        <div class="form-row single">
+          <div><label>Description</label><textarea name="description" placeholder="What does this project do?"></textarea></div>
+        </div>
+        <div class="form-row">
+          <div><label>GitHub URL</label><input type="url" name="github" placeholder="https://github.com/..."/></div>
+          <div><label>Live Demo URL</label><input type="url" name="live" placeholder="https://..."/></div>
+        </div>
+        <button type="submit" class="btn-add">Add Project</button>
+      </form>
+
+      <div class="items-list">
+        {% for project in data.projects %}
+        <details class="item-row">
+          <summary>
+            <div style="display:flex; align-items:center; gap:0.5rem; flex-wrap:wrap;">
+              <span class="item-name">{{ project.title }}</span>
+              <div class="tag-tools">
+                {% for t in project.tools %}<span class="tag">{{ t }}</span>{% endfor %}
+              </div>
+            </div>
+            <div class="item-actions">
+              <span class="btn-edit">Edit</span>
+              <a href="/admin/project/delete/{{ project.id }}" class="btn-delete" onclick="return confirm('Delete this project?')">Delete</a>
+            </div>
+          </summary>
+          <div class="edit-form">
+            <form method="POST" action="/admin/project/update/{{ project.id }}">
+              <div class="form-row">
+                <div><label>Title</label><input type="text" name="title" value="{{ project.title }}"/></div>
+                <div><label>Tools (comma separated)</label><input type="text" name="tools" value="{{ project.tools | join(', ') }}"/></div>
+              </div>
+              <div class="form-row single">
+                <div><label>Description</label><textarea name="description">{{ project.description }}</textarea></div>
+              </div>
+              <div class="form-row">
+                <div><label>GitHub URL</label><input type="url" name="github" value="{{ project.github }}"/></div>
+                <div><label>Live Demo URL</label><input type="url" name="live" value="{{ project.live }}"/></div>
+              </div>
+              <button type="submit" class="btn-add">Save Changes</button>
+            </form>
+          </div>
+        </details>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SKILLS ── -->
+  <div class="admin-section" id="skills">
+    <div class="admin-section-header">
+      <span class="section-dot" style="background: #6bcb77;"></span>
+      <h2>Skills</h2>
+    </div>
+    <div class="admin-section-body">
+
+      <div class="add-divider">Add New Skill</div>
+      <form method="POST" action="/admin/skill/add">
+        <div class="form-row triple">
+          <div><label>Skill Name</label><input type="text" name="name" placeholder="e.g. Python"/></div>
+          <div><label>Category</label><input type="text" name="category" placeholder="e.g. Programming"/></div>
+          <div>
+            <label>Level (%)</label>
+            <div class="skill-level-wrap">
+              <input type="range" name="level" min="0" max="100" value="75" oninput="this.nextElementSibling.textContent=this.value+'%'"/>
+              <span class="level-display">75%</span>
+            </div>
+          </div>
+        </div>
+        <button type="submit" class="btn-add">Add Skill</button>
+      </form>
+
+      <div class="items-list">
+        {% for skill in data.skills %}
+        <details class="item-row">
+          <summary>
+            <div style="display:flex; align-items:center; gap:1rem;">
+              <span class="item-name">{{ skill.name }}</span>
+              <span class="tag">{{ skill.category }}</span>
+              <span style="font-size:0.8rem; color: var(--c5);">{{ skill.level }}%</span>
+            </div>
+            <div class="item-actions">
+              <span class="btn-edit">Edit</span>
+              <a href="/admin/skill/delete/{{ skill.id }}" class="btn-delete" onclick="return confirm('Delete this skill?')">Delete</a>
+            </div>
+          </summary>
+          <div class="edit-form">
+            <form method="POST" action="/admin/skill/update/{{ skill.id }}">
+              <div class="form-row triple">
+                <div><label>Skill Name</label><input type="text" name="name" value="{{ skill.name }}"/></div>
+                <div><label>Category</label><input type="text" name="category" value="{{ skill.category }}"/></div>
+                <div>
+                  <label>Level (%)</label>
+                  <div class="skill-level-wrap">
+                    <input type="range" name="level" min="0" max="100" value="{{ skill.level }}" oninput="this.nextElementSibling.textContent=this.value+'%'"/>
+                    <span class="level-display">{{ skill.level }}%</span>
+                  </div>
+                </div>
+              </div>
+              <button type="submit" class="btn-add">Save Changes</button>
+            </form>
+          </div>
+        </details>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+
+  <!-- ── CERTIFICATIONS ── -->
+  <div class="admin-section" id="certs">
+    <div class="admin-section-header">
+      <span class="section-dot" style="background: #ffd93d;"></span>
+      <h2>Certifications</h2>
+    </div>
+    <div class="admin-section-body">
+
+      <div class="add-divider">Add New Certification</div>
+      <form method="POST" action="/admin/cert/add">
+        <div class="form-row">
+          <div><label>Certification Name</label><input type="text" name="name" placeholder="e.g. Python for Data Science"/></div>
+          <div><label>Issuer</label><input type="text" name="issuer" placeholder="e.g. Coursera"/></div>
+        </div>
+        <div class="form-row triple">
+          <div><label>Year</label><input type="text" name="year" placeholder="2024"/></div>
+          <div><label>Certificate URL (online)</label><input type="url" name="link" placeholder="https://..."/></div>
+          <div><label>File Path (local copy)</label><input type="text" name="file_path" placeholder="C:/certs/python.pdf or /certs/python.pdf"/></div>
+        </div>
+        <button type="submit" class="btn-add">Add Certification</button>
+      </form>
+
+      <div class="items-list">
+        {% for cert in data.certifications %}
+        <details class="item-row">
+          <summary>
+            <div>
+              <span class="item-name">{{ cert.name }}</span>
+              <span class="tag" style="margin-left:0.5rem;">{{ cert.issuer }} · {{ cert.year }}</span>
+            </div>
+            <div class="item-actions">
+              <span class="btn-edit">Edit</span>
+              <a href="/admin/cert/delete/{{ cert.id }}" class="btn-delete" onclick="return confirm('Delete this certification?')">Delete</a>
+            </div>
+          </summary>
+          <div class="edit-form">
+            <form method="POST" action="/admin/cert/update/{{ cert.id }}">
+              <div class="form-row">
+                <div><label>Name</label><input type="text" name="name" value="{{ cert.name }}"/></div>
+                <div><label>Issuer</label><input type="text" name="issuer" value="{{ cert.issuer }}"/></div>
+              </div>
+              <div class="form-row triple">
+                <div><label>Year</label><input type="text" name="year" value="{{ cert.year }}"/></div>
+                <div><label>Certificate URL</label><input type="url" name="link" value="{{ cert.link }}"/></div>
+                <div><label>File Path</label><input type="text" name="file_path" value="{{ cert.file_path }}"/></div>
+              </div>
+              <button type="submit" class="btn-add">Save Changes</button>
+            </form>
+          </div>
+        </details>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+
+  <!-- ── EDUCATION ── -->
+  <div class="admin-section" id="education">
+    <div class="admin-section-header">
+      <span class="section-dot" style="background: #c77dff;"></span>
+      <h2>Education</h2>
+    </div>
+    <div class="admin-section-body">
+
+      <div class="add-divider">Add New Education</div>
+      <form method="POST" action="/admin/edu/add">
+        <div class="form-row">
+          <div><label>Education</label><input type="text" name="education" placeholder="e.g. Bachelor of Computer Applications"/></div>
+          <div><label>Institution</label><input type="text" name="institution" placeholder="College / University name"/></div>
+        </div>
+        <div class="form-row">
+          <div><label>Year</label><input type="text" name="year" placeholder="2022 - 2025"/></div>
+          <div><label>Grade / CGPA</label><input type="text" name="grade" placeholder="e.g. 8.5 CGPA"/></div>
+        </div>
+        <button type="submit" class="btn-add">Add Education</button>
+      </form>
+
+      <div class="items-list">
+        {% for edu in data.education %}
+        <details class="item-row">
+          <summary>
+            <div>
+              <span class="item-name">{{ edu.degree }}</span>
+              <span class="tag" style="margin-left:0.5rem;">{{ edu.institution }} · {{ edu.year }}</span>
+            </div>
+            <div class="item-actions">
+              <span class="btn-edit">Edit</span>
+              <a href="/admin/edu/delete/{{ edu.id }}" class="btn-delete" onclick="return confirm('Delete this education entry?')">Delete</a>
+            </div>
+          </summary>
+          <div class="edit-form">
+            <form method="POST" action="/admin/edu/update/{{ edu.id }}">
+              <div class="form-row">
+                <div><label>Education</label><input type="text" name="education" value="{{ edu.education }}"/></div>
+                <div><label>Institution</label><input type="text" name="institution" value="{{ edu.institution }}"/></div>
+              </div>
+              <div class="form-row">
+                <div><label>Year</label><input type="text" name="year" value="{{ edu.year }}"/></div>
+                <div><label>Grade</label><input type="text" name="grade" value="{{ edu.grade }}"/></div>
+              </div>
+              <button type="submit" class="btn-add">Save Changes</button>
+            </form>
+          </div>
+        </details>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

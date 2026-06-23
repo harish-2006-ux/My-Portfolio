@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sign In — Harish V M Portfolio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: #0d0d14;
+      color: #f0f0f8;
+      min-height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+      position: relative; overflow: hidden;
+    }
+    .bg-glow {
+      position: absolute; inset: 0; pointer-events: none;
+      background:
+        radial-gradient(ellipse at 20% 50%, rgba(255,107,107,0.12) 0%, transparent 55%),
+        radial-gradient(ellipse at 80% 30%, rgba(199,125,255,0.12) 0%, transparent 55%),
+        radial-gradient(ellipse at 55% 80%, rgba(77,150,255,0.10) 0%, transparent 50%);
+    }
+    .bg-grid {
+      position: absolute; inset: 0; pointer-events: none;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+      background-size: 60px 60px;
+    }
+    .card {
+      position: relative;
+      background: rgba(26,26,46,0.85);
+      border: 1px solid rgba(255,255,255,0.09);
+      border-radius: 28px;
+      padding: 3rem 2.5rem;
+      width: 100%; max-width: 420px;
+      text-align: center;
+      backdrop-filter: blur(20px);
+    }
+    .avatar {
+      width: 72px; height: 72px; border-radius: 20px;
+      margin: 0 auto 1.5rem;
+      background: linear-gradient(135deg, #ff6b6b, #ffd93d, #c77dff);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 2rem;
+    }
+    .card-name {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.7rem; font-weight: 800;
+      background: linear-gradient(135deg, #ff6b6b, #ffd93d, #c77dff);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      margin-bottom: 0.4rem;
+    }
+    .card-role {
+      font-size: 0.9rem; color: #9999bb; margin-bottom: 0.3rem;
+    }
+    .card-tagline {
+      font-size: 0.82rem; color: rgba(255,255,255,0.35);
+      margin-bottom: 2.5rem; font-style: italic;
+    }
+    .divider {
+      border: none; border-top: 1px solid rgba(255,255,255,0.07);
+      margin: 0 0 2rem;
+    }
+    .signin-label {
+      font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.12em;
+      color: #9999bb; font-weight: 600; margin-bottom: 1.2rem;
+    }
+    .btn-google {
+      display: flex; align-items: center; justify-content: center; gap: 0.9rem;
+      width: 100%; padding: 0.9rem 1.5rem;
+      background: #fff; color: #3c3c3c;
+      border: none; border-radius: 14px;
+      font-size: 0.95rem; font-weight: 600;
+      cursor: pointer; text-decoration: none;
+      font-family: 'DM Sans', sans-serif;
+      transition: transform 0.18s, box-shadow 0.18s, background 0.18s;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.3);
+    }
+    .btn-google:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 28px rgba(0,0,0,0.4);
+      background: #f5f5f5;
+    }
+    .google-icon {
+      width: 22px; height: 22px; flex-shrink: 0;
+    }
+    .footer-note {
+      margin-top: 1.8rem;
+      font-size: 0.75rem; color: rgba(255,255,255,0.25);
+      line-height: 1.6;
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-glow"></div>
+  <div class="bg-grid"></div>
+
+  <div class="card">
+    <div class="avatar">👨‍💻</div>
+    <div class="card-name">Harish V M</div>
+    <div class="card-role">Data Analyst &amp; Developer</div>
+    <div class="card-tagline">"Turning data into decisions"</div>
+    <hr class="divider"/>
+    <div class="signin-label">Sign in to view portfolio</div>
+    <a href="/auth/google" class="btn-google">
+      <svg class="google-icon" viewBox="0 0 48 48">
+        <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
+        <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
+        <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
+        <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.31-8.16 2.31-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
+        <path fill="none" d="M0 0h48v48H0z"/>
+      </svg>
+      Continue with Google
+    </a>
+    <p class="footer-note">
+      Your info is only used to personalize your visit.<br/>
+      Only your name and profile photo are shown.
+    </p>
+  </div>
+</body>
+</html>
