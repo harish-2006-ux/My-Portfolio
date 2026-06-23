@@ -1,0 +1,32 @@
+🚀 QUICK DEPLOYMENT STEPS
+========================
+
+Your portfolio is ready to deploy! Here's what to do:
+
+1️⃣ CREATE GITHUB REPO
+   → Go to: https://github.com/new
+   → Name it: my-portfolio
+   → Click "Create repository"
+
+2️⃣ PUSH YOUR CODE
+   Run these commands in your terminal:
+   
+   git remote add origin https://github.com/YOUR_USERNAME/YOUR_REPO_NAME.git
+   git branch -M main
+   git push -u origin main
+
+3️⃣ DEPLOY TO RENDER
+   → Go to: https://render.com
+   → Click "New +" → "Web Service"
+   → Connect your GitHub repo
+   → Click "Create Web Service"
+   → Wait 2-3 minutes ⏱️
+
+4️⃣ DONE! 🎉
+   Your portfolio will be live at:
+   https://your-app-name.onrender.com
+
+📖 For detailed instructions, see: DEPLOYMENT.md
+
+⚠️ IMPORTANT: Change your admin password after deployment!
+   Current password: harish123
